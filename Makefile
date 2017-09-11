@@ -90,18 +90,14 @@ include $(top_srcdir)/src/Makefile.shlib
 ifeq ($(TCL_SHARED_BUILD), 1)
 
 all: all-lib
-	$(MAKE) -C modules $@
 
 
 install: all install-lib install-data
-	$(MAKE) -C modules $@
 
 installdirs: installdirs-lib
 	$(MKDIR_P) '$(DESTDIR)$(datadir)/extension'
-	$(MAKE) -C modules $@
 
 uninstall: uninstall-lib uninstall-data
-	$(MAKE) -C modules $@
 
 install-data: installdirs
 	$(INSTALL_DATA) $(addprefix $(srcdir)/, $(DATA)) '$(DESTDIR)$(datadir)/extension/'
@@ -138,4 +134,3 @@ clean distclean maintainer-clean: clean-lib
 ifeq ($(PORTNAME), win32)
 	rm -f $(tclwithver).def
 endif
-	$(MAKE) -C modules $@

@@ -215,6 +215,8 @@ static int pltcl_elog(ClientData cdata, Tcl_Interp *interp,
 		   int argc, CONST84 char *argv[]);
 static int pltcl_quote(ClientData cdata, Tcl_Interp *interp,
 			int argc, CONST84 char *argv[]);
+static int pltcl_cancel_pending(ClientData cdata, Tcl_Interp *interp,
+			int objc, Tcl_Obj *const objv[]);
 static int pltcl_argisnull(ClientData cdata, Tcl_Interp *interp,
 				int argc, CONST84 char *argv[]);
 static int pltcl_returnnull(ClientData cdata, Tcl_Interp *interp,
@@ -431,6 +433,8 @@ pltcl_init_interp(pltcl_interp_desc *interp_desc, bool pltrusted)
 					  pltcl_elog, NULL, NULL);
 	Tcl_CreateCommand(interp, "quote",
 					  pltcl_quote, NULL, NULL);
+	Tcl_CreateObjCommand(interp, "cancel_pending",
+						 pltcl_cancel_pending, NULL, NULL); 
 	Tcl_CreateCommand(interp, "argisnull",
 					  pltcl_argisnull, NULL, NULL);
 	Tcl_CreateCommand(interp, "return_null",
@@ -1882,6 +1886,16 @@ pltcl_subtrans_abort(Tcl_Interp *interp,
 	FreeErrorData(edata);
 }
 
+/**********************************************************************
+ * pltcl_cancel_pending()      - return state of the global
+ *                                QueryCancelPending
+ **********************************************************************/
+static int
+pltcl_cancel_pending(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
+{
+	Tcl_SetObjResult(interp, Tcl_NewIntObj(QueryCancelPending));
+	return TCL_OK;
+}
 
 /**********************************************************************
  * pltcl_SPI_execute()		- The builtin SPI_execute command
